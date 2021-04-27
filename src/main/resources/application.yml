@@ -1,0 +1,37 @@
+spring:
+  application:
+    name: customers
+  profiles:
+    active: production
+
+#DATABASE ACCESS
+
+datasource:
+  driverClassName: com.mysql.jdbc.Driver
+  url: jdbc:mysql://localhost:3306/customer?serverTimezone=Europe/Warsaw&useSSL=false&allowPublicKeyRetrieval=true
+  username: ${MYSQL_LOGIN}
+  password: ${MYSQL_PASSWORD}
+  jpa:
+    hibernate.ddl-auto: update
+    generate-ddl: true
+    show-sql: true
+
+#ACTUATOR INFO
+info:
+  app:
+    name: "Customers"
+    version: "0.0.1"
+    profile: ${spring.profiles.active}
+  serverInfo:
+    port: ${server.port}
+
+#ACCESS
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+
+customers:
+  allow-get-customers: ${customers.allow-get-customers}
