@@ -1,9 +1,13 @@
 package com.kodilla.customers.controller;
 
+import com.kodilla.customers.connector.AccountDto;
+import com.kodilla.customers.connector.response.GetCustomerProductsResponse;
+import com.kodilla.customers.connector.response.GetCustomerResponse;
 import com.kodilla.customers.domain.CustomerDto;
 import com.kodilla.customers.exception.CustomerNotFoundException;
 import com.kodilla.customers.mapper.CustomerMapper;
 import com.kodilla.customers.service.CustomerService;
+import com.kodilla.customers.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +37,9 @@ public class CustomerController {
     @Autowired
     private CustomerMapper customerMapper;
 
+    @Autowired
+    private ProductService productService;
+
     @GetMapping("/customers")
     public List<CustomerDto> getCustomers() { return customerMapper.mapToCustomerDtoList(customerService.getAllCustomers()); }
 
@@ -49,5 +56,24 @@ public class CustomerController {
         }
         List<CustomerDto> customers = new ArrayList<>();
         return customers = customerMapper.mapToCustomerDtoList(customerService.getCustomersById(customerId));
+    }
+
+    @GetMapping("/{customerId}")
+    public GetCustomerResponse getCustomer(@PathVariable Long customerId) {
+        return customerService.findCustomer(customerId)
+                .map(GetCustomerResponse:: new)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+    }
+
+    @GetMapping("/{customerId}/products")
+    public GetCustomerProductsResponse getCustomerProduct(@PathVariable Long customerId) {
+        CustomerDto customerDto = customerService.findCustomer(customerId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST));
+        List<AccountDto> customerAccounts = productService.findCustomerAccounts(customerId);
+        return GetCustomerProductsResponse.builder()
+                .customerId(customerDto.getId())
+                .fullName(customerDto.getFirstname() + " " + customerDto.getLastname())
+                .accounts(customerAccounts)
+                .build();
     }
 }
