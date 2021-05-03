@@ -11,10 +11,11 @@ import com.kodilla.customers.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
@@ -24,12 +25,12 @@ import java.util.List;
 @Slf4j
 @CrossOrigin("*")
 @RestController
-@RequestMapping("/v1")
+@RequestMapping(value = "/v1/customer", produces = {MediaType.APPLICATION_JSON_VALUE})
 @RequiredArgsConstructor
 public class CustomerController {
 
-    @Value("$(customers.allow-get-customers}")
-    private boolean allowGetCustomers;
+    //@Value("$(application.allow-get-customers}")
+    //private boolean allowGetCustomers;
 
     @Autowired
     private CustomerService customerService;
@@ -43,15 +44,15 @@ public class CustomerController {
     @GetMapping("/customers")
     public List<CustomerDto> getCustomers() { return customerMapper.mapToCustomerDtoList(customerService.getAllCustomers()); }
 
-    @GetMapping("{customers/{customersId}")
-    public CustomerDto getCustomer(@PathVariable long customerId) throws CustomerNotFoundException {
-        return customerMapper.mapToCustomerDto(customerService.getCustomer(customerId).orElseThrow(CustomerNotFoundException::new));
-    }
+    //@GetMapping("/{customerId}")
+    //public CustomerDto getCustomer(@PathVariable long customerId) throws CustomerNotFoundException {
+    //    return customerMapper.mapToCustomerDto(customerService.getCustomer(customerId).orElseThrow(CustomerNotFoundException::new));
+    //}
 
-    @GetMapping
+    @GetMapping("/accounts/{customerId}")
     public List<CustomerDto> getAccounts(@RequestParam("customerId") Long customerId) {
-        if(!allowGetCustomers) {
-            log.info("Getting accoutns is disabled");
+        if(!true) {
+            log.info("Getting accounts is disabled");
             throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, "Getting customers is disabled");
         }
         List<CustomerDto> customers = new ArrayList<>();

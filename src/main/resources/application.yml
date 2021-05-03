@@ -6,20 +6,20 @@ spring:
 
 #DATABASE ACCESS
 
-datasource:
-  driverClassName: com.mysql.jdbc.Driver
-  url: jdbc:mysql://localhost:3306/account?serverTimezone=Europe/Warsaw&useSSL=false&allowPublicKeyRetrieval=true
-  username: ${MYSQL_LOGIN}
-  password: ${MYSQL_PASSWORD}
-jpa:
-  properties:
+  datasource:
+    driverClassName: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/account?serverTimezone=Europe/Warsaw&useSSL=false&allowPublicKeyRetrieval=true
+    username: ${MYSQL_LOGIN}
+    password: ${MYSQL_PASSWORD}
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+    database: mysql
+    show-sql: true
     hibernate:
-      dialect: org.hibernate.dialect.MySQL8Dialect
-  database: mysql
-  show-sql: true
-  hibernate:
-    ddl-auto: update
-    generate-ddl: true
+      ddl-auto: update
+      generate-ddl: true
 
 #ACTUATOR INFO
 info:
@@ -38,8 +38,12 @@ management:
       exposure:
         include: '*'
 
-customers:
+application:
   allow-get-customers: ${customers.allow-get-customers}
 
 eureka:
   client: ${eureka-client}
+
+feign:
+  hystrix:
+    enabled: true
