@@ -1,6 +1,7 @@
 package com.kodilla.customers.connector.response;
 
 import com.kodilla.customers.connector.AccountDto;
+import com.kodilla.customers.connector.CardDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,5 +17,6 @@ import java.util.List;
         private Long customerId;
         private String fullName;
         private List<AccountDto> accounts;
+        private List<CardDto> cards;
     }
 

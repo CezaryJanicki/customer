@@ -1,6 +1,7 @@
 package com.kodilla.customers.controller;
 
 import com.kodilla.customers.connector.AccountDto;
+import com.kodilla.customers.connector.CardDto;
 import com.kodilla.customers.connector.response.GetCustomerProductsResponse;
 import com.kodilla.customers.connector.response.GetCustomerResponse;
 import com.kodilla.customers.domain.CustomerDto;
@@ -71,10 +72,12 @@ public class CustomerController {
         CustomerDto customerDto = customerService.findCustomer(customerId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST));
         List<AccountDto> customerAccounts = productService.findCustomerAccounts(customerId);
+        List<CardDto> customerCards = productService.findCustomerCards(customerId);
         return GetCustomerProductsResponse.builder()
                 .customerId(customerDto.getId())
                 .fullName(customerDto.getFirstname() + " " + customerDto.getLastname())
                 .accounts(customerAccounts)
+                .cards(customerCards)
                 .build();
     }
 }

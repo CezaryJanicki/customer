@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Collections;
 
-@FeignClient(name = "accounts",fallback = AccountsConnectorFallback.class)
+@FeignClient(name = "accounts", fallback = AccountsConnectorFallback.class)
 public interface AccountsConnector {
 
     @GetMapping("/v1/accounts")
