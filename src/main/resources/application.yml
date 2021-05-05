@@ -41,9 +41,16 @@ management:
 application:
   allow-get-customers: ${customers.allow-get-customers}
 
-eureka:
-  client: ${eureka-client}
+#eureka:
+#  client: ${eureka-client} #False w.Eureka Client
 
 feign:
   hystrix:
-    enabled: true
+    enabled: false #false w.Eureka Client
+
+accounts:
+  ribbon:
+    eureka:
+      enabled: true #false w.Eureka Client
+
+    listOfServers: localhost:9991,localhost:9992

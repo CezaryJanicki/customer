@@ -9,7 +9,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 @EnableCircuitBreaker
 @EnableFeignClients
 @SpringBootApplication
-@EnableDiscoveryClient
+//@EnableDiscoveryClient
 public class CustomerApplication {
 
     public static void main(String[] args) {
