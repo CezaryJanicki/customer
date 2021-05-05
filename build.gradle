@@ -1,8 +1,23 @@
+import org.springframework.cloud.contract.verifier.config.TestFramework
+
+buildscript {
+    repositories {
+        mavenCentral()
+        mavenLocal()
+    }
+
+    dependencies {
+        classpath 'org.springframework.cloud:spring-cloud-contract-gradle-plugin:2.2.3.RELEASE'
+    }
+}
+
 plugins {
     id 'org.springframework.boot' version '2.3.0.RELEASE'
     id 'io.spring.dependency-management' version '1.0.9.RELEASE'
     id 'java'
 }
+
+apply plugin: 'spring-cloud-contract'
 
 group = 'com.kodilla'
 version = '0.0.1-SNAPSHOT'
@@ -11,6 +26,7 @@ targetCompatibility= '11'
 
 repositories {
     mavenCentral()
+    mavenLocal()
 }
 
 ext {
@@ -34,6 +50,9 @@ dependencies {
     compileOnly 'org.projectlombok:lombok:1.18.12'
     annotationProcessor 'org.projectlombok:lombok:1.18.12'
 
+    testImplementation 'org.springframework.cloud:spring-cloud-starter-contract-stub-runner'
+    testImplementation 'org.springframework.cloud:spring-cloud-starter-contract-verifier'
+    testImplementation 'com.h2database:h2:1.4.200'
 
     testCompileOnly 'org.projectlombok:lombok:1.18.12'
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.12'
@@ -48,6 +67,19 @@ dependencyManagement {
     }
 }
 
+contracts {
+    testFramework = TestFramework.JUNIT5
+    packageWithBaseClasses = 'com.kodilla.customers'
+    failOnNoContracts = false
+}
+
 test {
     useJUnitPlatform()
+}
+
+task stubsJar(type: Jar) {
+    into("/") {
+        include('**/*.groovy')
+        from("${project.rootDir}/src/main/resources/contracts")
+    }
 }
